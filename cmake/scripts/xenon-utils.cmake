@@ -14,6 +14,21 @@ function(add_xenon_module project_name xex_conf project_sources)
     target_link_options(${project_name} PRIVATE "/XEXCONFIG:${MODULE_CONFIG_FILE}")
 endfunction()
 
+# Compile Xbox 360 Standalone Executable (Title)
+function(add_xenon_executable project_name xex_conf project_sources)
+    add_executable(${project_name} ${project_sources})
+    set_target_properties(${project_name} PROPERTIES SUFFIX ".xex")
+
+    # Get module xex configuration file
+    get_filename_component(MODULE_CONFIG_FILE "${xex_conf}" ABSOLUTE)
+    if(NOT MODULE_CONFIG_FILE)
+        message(FATAL_ERROR "Unable to locate XEX configuration.")
+    endif()
+
+    # Apply configuration file for imagexex
+    target_link_options(${project_name} PRIVATE "/XEXCONFIG:${MODULE_CONFIG_FILE}")
+endfunction()
+
 # Compile Xbox 360 Static library
 function(add_xenon_library project_name project_sources)
     add_library(${project_name} STATIC ${project_sources})

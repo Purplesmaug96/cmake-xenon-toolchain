@@ -76,16 +76,41 @@ if(PLATFORM_XENON)
 	set(CMAKE_CXX_STANDARD_LIBRARIES "")
 
 	# Set common libraries
-	set(XBOX360_LIBRARIES 
+	set(XBOX360_LIBRARIES
+		"libcMT.lib"
+		"vcomp.lib"
 		"xboxkrnl.lib"
 		"xapilib.lib"
-		"xact3ltcg.lib"
-		"xmcoreltcg.lib"
-		"xaudio2.lib"
-		"xgraphics.lib"
 		"xnet.lib"
-		"libcmt.lib"
-		"vcomp.lib"
+		"xaudio2.lib"
+		"xact3.lib"
+		"d3d9.lib"
+		"d3d9i.lib"
+		"xgraphics.lib"
+		"d3dx9.lib"
+		"xavatar2.lib"
+		"xhttp.lib"
+		"xauth.lib"
+		"xonline.lib"
+		"xuihtml.lib"
+		"xuirender.lib"
+		"xuirun.lib"
+		"xime.lib"
+
+		# === PASS 1: Base tracking engines ===
+		"st.lib"           # <-- The missing Skeletal Tracking lib
+		"xmcore.lib"
+		"nuifitnessapi.lib"
+
+		# === PASS 2: NUI APIs & JSON ===
+		"xjson.lib"
+		"nuihandles.lib"
+		"nuiapi.lib"
+
+		# === PASS 3: Resolve circular references ===
+		"st.lib"
+		"xmcore.lib"
+		"nuifitnessapi.lib"
 	)
 
 	string (REPLACE ";" " " XBOX360_LIBRARIES "${XBOX360_LIBRARIES}")
