@@ -75,84 +75,43 @@ if(PLATFORM_XENON)
 	# Clear default libraries
 	set(CMAKE_CXX_STANDARD_LIBRARIES "")
 
-	if(CMAKE_BUILD_TYPE MATCHES "Release")
-		# Set common libraries
-		set(XBOX360_LIBRARIES
-			"libcMT.lib"
-			"vcomp.lib"
-			"xboxkrnl.lib"
-			"xapilib.lib"
-			"xnet.lib"
-			"xaudio2.lib"
-			"xact3.lib"
-			"d3d9.lib"
-			"d3d9i.lib"
-			"xgraphics.lib"
-			"d3dx9.lib"
-			"xavatar2.lib"
-			"xhttp.lib"
-			"xauth.lib"
-			"xonline.lib"
-			"xuihtml.lib"
-			"xuirender.lib"
-			"xuirun.lib"
-			"xime.lib"
+	# Set common libraries
+	set(XBOX360_LIBRARIES
+		"libcMT.lib"
+		"vcomp.lib"
+		"xboxkrnl.lib"
+		"xapilib.lib"
+		"xnet.lib"
+		"xaudio2.lib"
+		"xact3.lib"
+		"d3d9.lib"
+		"d3d9i.lib"
+		"xgraphics.lib"
+		"d3dx9.lib"
+		"xavatar2.lib"
+		"xhttp.lib"
+		"xauth.lib"
+		"xonline.lib"
+		"xuihtml.lib"
+		"xuirender.lib"
+		"xuirun.lib"
+		"xime.lib"
 
-			# === PASS 1: Base tracking engines ===
-			"st.lib"           # <-- The missing Skeletal Tracking lib
-			"xmcore.lib"
-			"nuifitnessapi.lib"
+		# === PASS 1: Base tracking engines ===
+		"st.lib"           # <-- The missing Skeletal Tracking lib
+		"xmcore.lib"
+		"nuifitnessapi.lib"
 
-			# === PASS 2: NUI APIs & JSON ===
-			"xjson.lib"
-			"nuihandles.lib"
-			"nuiapi.lib"
+		# === PASS 2: NUI APIs & JSON ===
+		"xjson.lib"
+		"nuihandles.lib"
+		"nuiapi.lib"
 
-			# === PASS 3: Resolve circular references ===
-			"st.lib"
-			"xmcore.lib"
-			"nuifitnessapi.lib"
-		)
-	else()
-		# Set common libraries
-		set(XBOX360_LIBRARIES
-			"libcMTD.lib"       # <-- Critical: Debug runtime library
-			"vcompd.lib"        # <-- Debug OpenMP
-			"xboxkrnl.lib"      # Kernel remains the same
-			"xapilibd.lib"      # <-- Debug APIs
-			"xnetd.lib"
-			"xaudio2.lib"
-			"xact3.lib"
-			"d3d9d.lib"
-			"d3d9i.lib"
-			"xgraphicsd.lib"
-			"d3dx9d.lib"
-			"xavatar2d.lib"
-			"xhttpd.lib"
-			"xauthd.lib"
-			"xonlined.lib"
-			"xuihtmld.lib"
-			"xuirenderd.lib"
-			"xuirund.lib"
-			"ximed.lib"
-
-			# Base tracking engines (Debug variants)
-			"std.lib"
-			"xmcored.lib"
-			"nuifitnessapid.lib"
-
-			# NUI APIs & JSON (Debug variants)
-			"xjsond.lib"
-			"nuihandlesd.lib"
-			"nuiapid.lib"
-
-			# Circular references (Debug variants)
-			"std.lib"
-			"xmcored.lib"
-			"nuifitnessapid.lib"
-		)
-		add_link_options("/NODEFAULTLIB:LIBCMT" "/NODEFAULTLIB:XAPILIB")
-	endif()
+		# === PASS 3: Resolve circular references ===
+		"st.lib"
+		"xmcore.lib"
+		"nuifitnessapi.lib"
+	)
 
 	string (REPLACE ";" " " XBOX360_LIBRARIES "${XBOX360_LIBRARIES}")
 
@@ -168,5 +127,6 @@ if(PLATFORM_XENON)
 		"${XENON_XDK_ROOT}/lib/xbox"
 	)
 
-	link_directories(${XBOX360_LIBRARY_DIRS})
+	string(REPLACE ";" "\" /LIBPATH:\"" XBOX360_LIBRARY_DIRS_FIXED "${XBOX360_LIBRARY_DIRS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LIBPATH:\"${XBOX360_LIBRARY_DIRS_FIXED}\"")
 endif()
